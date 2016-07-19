@@ -1,0 +1,44 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script>console.log("start");</script>
+  <% include ../partials/whichday %>
+  <% include ../partials/curdate %>
+  <% include ../partials/urlParser %>
+  <script>
+  $(document).ready(function () {
+    var $minimum = $('#minimum');
+
+    // check current url
+  var ourLocation = document.URL;
+ // console.log("Currently at " + ourLocation);
+  // do magic with the current url
+
+  // get start parameter for later use
+  var start = $_GET('start');
+  console.log(start);
+  // split and rebuild start date for finnish format
+  var startmod = start.split('-');
+  var paivamaara = startmod[2] + '.' + startmod[1] + '.' + startmod[0];
+
+  // get data using ajax in json fromat
+  var jsonData =  $.ajax({
+    url: '/lampo1/day1min?start=' + start,
+    dataType: 'json',
+
+    success: function(minimum) {
+    console.log("minimum");
+    // modify data and append show -- TODO change div names
+      $.each(minimum, function(i, order) {
+       /* var mydate = new Date(order[0].timestamp);
+        var modified = whichDay(mydate);
+        var min0 = minutes0(mydate.getMinutes());
+        var hour0 = hours0(mydate.getUTCHours());
+        $minimum.append('<h3>'+ modified + ' ' + hour0 + ':' + min0 + '</h3>' ); */
+        $minimum.append('<h1>'+ order[0].lampo + ' °C </h1>' );
+        //console.log(minimum);
+      });
+    }
+  });
+  $('#minimum').html($minimum);
+  });
+  </script>
+  <div id="minimum"> </div>

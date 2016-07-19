@@ -1,0 +1,28 @@
+<!-- curdate return current date in 2016-07-05 format -->
+<!-- minutes0 return minutes in 0 format is < 10 -->
+<!-- hours0 return hours in 0 format is < 10 -->
+
+<script>
+  function curdate() {
+    var d = new Date();
+    var y = d.getUTCFullYear();
+    var m = ("0" + (d.getMonth() + 1)).slice(-2);
+    var n = ("0" + d.getDate()).slice(-2);
+    today =  y + '-' + m + '-' + n;
+    return today;
+  }
+
+  function minutes0(min){
+    var m = min;
+    var min0 = ("0" + m).slice(-2);
+    return min0;
+  }
+
+  function hours0(hours){
+    var h = hours;
+    var hours0 = ("0" + h).slice(-2);
+    return hours0;
+  }
+
+</script>
+

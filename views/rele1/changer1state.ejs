@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+</head>
+<body class="container">
+
+    <header>
+        <% include ../partials/header %>
+    </header>
+
+    <main>
+      <!-- div for spinner -->
+      <div id="loading" class=""></div>
+      <!-- bootstrap basic columns -->
+      <div class="col-lg-4 col-md-4 col-sm-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Suihkulähde</div>
+              <div id="spin1" class="panel-body">
+                <button type="button" class="btn btn-primary btn-lg btn-block">Päälle</button>
+              </div>
+              <div id="spin2" class="panel-body">
+                <button type="button" class="btn btn-primary btn-lg btn-block">Pois päältä</button>
+              </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-4">
+      </div>
+       <div class="col-lg-4 col-md-4 col-sm-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Suihkulähteen tila</div>
+              <div class="panel-body">
+                <% include ../rele1/latestr1 %>
+              </div>
+        </div>
+      </div>
+
+    </main>
+    <% include ../partials/curdate %>
+    <script>
+     today = curdate();
+
+     // toggle spinner
+     function active() { $( loading ).toggleClass('loading'); }
+     // go to url
+     function gotorele1on() { window.location='rele1on' }
+     // listen click events from spin1
+     document.getElementById('spin1').addEventListener('click', function() {
+      active();
+      gotorele1on();
+    }, false);
+    // go to url
+    function gotorele1off() { window.location='rele1off' }
+    // listen clic events from spin2
+    document.getElementById('spin2').addEventListener('click', function() {
+      active();
+      gotorele1off();
+    }, false);
+    // rele current status
+    function releOn () {
+      $.ajax({
+        url: 'rele1on',
+      });
+    }
+    </script>
+
+    <footer>
+
+    </footer>
+
+</body>
+</html>

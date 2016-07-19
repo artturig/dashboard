@@ -1,0 +1,29 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+
+  <% include ../partials/whichday %>
+  <% include ../partials/curdate %>
+
+  <script>
+  $(document).ready(function () {
+    var $orders = $('#orders');
+  // get data
+  $.ajax({
+    url: '/lampo1/latestL1',
+    success: function(orders) {
+   // console.log(orders);
+    // modify data and append show -- TODO change div names
+      $.each(orders, function(i, order) {
+        var mydate = new Date(order[0].timestamp);
+        var modified = whichDay(mydate);
+        var min0 = minutes0(mydate.getMinutes());
+        var hour0 = hours0(mydate.getUTCHours());
+        $orders.append('<h3>'+ modified + ' ' + hour0 + ':' + min0 + '</h3>' );
+        $orders.append('<h1>'+ order[0].lampo + ' °C </h1>' );
+        //console.log(orders);
+      });
+    }
+  });
+  $('#orders').html($orders);
+  });
+  </script>
+  <div id="orders"> </div>

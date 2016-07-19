@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+</head>
+
+<body class="container">
+
+  <header>
+    <% include ../partials/header %>
+    <% include ../partials/curdate %>
+    <% include ../partials/urlParser %>
+  </header>
+
+  <div class="col-lg-6 col-md-6 col-sm-6">
+    <div class="panel panel-primary">
+      <div class="panel-heading">Päivän korkein lämpötila</div>
+      <div class="panel-body">
+        <% include ../lampo1/maxlampo1 %>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6">
+    <div class="panel panel-primary">
+      <div class="panel-heading">Päivän matalin lämpötila</div>
+      <div class="panel-body">
+        <% include ../lampo1/minlampo1 %>
+      </div>
+    </div>
+  </div>
+
+  <div class="input-group date">
+    <input id='datepicker' type="text" class="form-control" style="cursor:pointer;"><span class="input-group-addon" id="btn" style="cursor:pointer;" ><i class="glyphicon glyphicon-th"></i></span>
+  </div>
+  <div>
+    <canvas id="myLineChart" ></canvas>
+  </div>
+
+
+<script>
+  // check current url
+  var ourLocation = document.URL;
+ // console.log("Currently at " + ourLocation);
+
+  // get start parameter for later use
+  var start = $_GET('start');
+  //console.log(start);
+  // split and rebuild start date for finnish format
+  var startmod = start.split('-');
+  var paivamaara = startmod[2] + '.' + startmod[1] + '.' + startmod[0];
+
+  function drawLineChart() {
+
+    // format timestamp
+    Date.prototype.formatMMDDYYYY = function() {
+      return hours0(this.getUTCHours()) +
+      ":" +  minutes0(this.getMinutes());
+    }
+    // get data using ajax in json fromat
+    var jsonData = $.ajax({
+      url: 'day1?start='+start,
+      dataType: 'json',
+    }).done(function (results) {
+
+      // Split timestamp and data into separate arrays
+      var labels = [], data=[];
+      results["lampo1"].forEach(function(lampo) {
+        labels.push(new Date(lampo.timestamp).formatMMDDYYYY());
+        //labels.push(parseFloat(lampo.lampo));
+        data.push(parseFloat(lampo.lampo));
+        //console.log(lampo.timestamp);
+        //console.log(lampo.lampo);
+      });
+
+      // Create the chart.js data structure using 'labels' and 'data'
+      var tempData = {
+        labels : labels,
+        datasets : [{
+          labels                : "Node1",
+          fillColor             : "rgba(151,187,205,0.2)",
+          strokeColor           : "rgba(151,187,205,1)",
+          pointColor            : "rgba(151,187,205,1)",
+          pointStrokeColor      : "#fff",
+          pointHighlightFill    : "#fff",
+          pointHighlightStroke  : "rgba(151,187,205,1)",
+          data                  : data
+        }]
+      };
+
+      // Get the context of the canvas element we want to select
+      var ctx = document.getElementById("myLineChart").getContext("2d");
+
+      // Instantiate a new chart
+      var myLineChart =  new Chart(ctx , {
+        type: "line",
+        data: tempData,
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                min: 0,
+                beginAtZero: true,
+                max: 50,
+              }
+            }]
+          },
+          title: {
+            display: true,
+            text: paivamaara
+          },
+          legend: {
+            display: false,
+          }
+        }
+      });
+    });
+  }
+  // draw chart
+  drawLineChart();
+
+  // datepicker options
+  $(function() {
+    $('#datepicker').datepicker({
+      autoclose: true,
+      weekStart: 1,
+      language: 'fi',
+      format: 'yyyy-mm-dd',
+      todayBtn: "linked",
+      todayHighlight: true
+    })
+    .on("changeDate",testi),
+      // make icon clicable
+      $('#btn').click(function() {
+        $("#datepicker").focus();
+      });
+    });
+
+  // on calendar change go to new url
+  function testi(){
+    var date = document.getElementById('datepicker').value;
+    window.location='all?start=' + date;
+  }
+</script>
+
+<footer>
+
+    </footer>
+
+</body>
+</html>
+
+
+
+

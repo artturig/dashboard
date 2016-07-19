@@ -1,0 +1,37 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+
+  <% include ../partials/whichday %>
+  <% include ../partials/curdate %>
+  <script>
+  $(document).ready(function () {
+    var $orders = $('#rele1status');
+  $.ajax({
+    url: '/rele1/latest',
+  success: function(orders) {
+   // console.log(orders);
+    $.each(orders, function(i, order) {
+
+      var mydate = new Date(order[0].timestamp);
+      var modified = whichDay(mydate);
+      var min0 = minutes0(mydate.getMinutes());
+      var hour0 = hours0(mydate.getUTCHours());
+      $orders.append('<h3>'+ modified + ' ' + hour0 + ':' + min0 + '</h3>' );
+      // 1 = on, 0 = off
+      var status = "2";
+      console.log(order[0].tila);
+      if (order[0].tila == 1) {
+        status = "Pois päältä";
+        $orders.append('<h1 class="bg-danger">' + status + '</h1>');
+      } else {
+        status = "Päällä";
+        $orders.append('<h1 class="bg-success">' + status + '</h1>');
+      }
+
+      //console.log(orders);
+      });
+    }
+  });
+  $('#rele1status').html($orders);
+});
+</script>
+  <div   id="rele1status"> </div>
