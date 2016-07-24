@@ -11,7 +11,7 @@ var fs = require('fs');
 module.exports = {
   // return latest rele1 status from db
   latest: function(req, res, next) {
-    Rele1.find({ id: { '>': 0 }, limit: 1, sort: 'id DESC'}, function foundLampo(err, rele1) {
+    Rele1.find({ id: { '>': 0 }, limit: 1, sort: 'id DESC'}, function foundRelelatest(err, rele1) {
       if (err) return next(err);
       if (!rele1) return next();
       return res.json('rele1/latest', {
@@ -22,7 +22,7 @@ module.exports = {
   // exec remote file with command
   rele1on: function(req, res, next) {
     const spawn = require('child_process').exec;
-    const child = exec('sudo ./remote -m 80',
+    const child = exec('sudo ./remote -m 80', {timeout: 6000, killSignal: 'SIGHUP'},
       function tulosOn(error, stdout, stderr) {
         //console.log('stdout: ' + stdout);
         if (error !== null) {

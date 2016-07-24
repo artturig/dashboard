@@ -30,7 +30,7 @@ module.exports = {
   },
 
   page: function(req, res, next) {
-    Lampo1.find(function foundLampo1(err, lampo1) {
+    Lampo1.find(function basicLampo1(err, lampo1) {
       if (err) return(err);
 
       res.view({
@@ -40,7 +40,7 @@ module.exports = {
   },
 
   json: function(req, res, next) {
-    Lampo1.find(function foundLampo1(err, lampo1) {
+    Lampo1.find(function jsonLampo1(err, lampo1) {
       if (err) return(err);
 
       res.json({
@@ -50,7 +50,7 @@ module.exports = {
   },
   // get latest lampo1 temperature and timestamp
   latestL1: function(req, res, next) {
-    Lampo1.find({ id: { '>': 0 }, limit: 1, sort: 'id DESC'}, function foundLampo(err, lampo1) {
+    Lampo1.find({ id: { '>': 0 }, limit: 1, sort: 'id DESC'}, function latestLampo(err, lampo1) {
       if (err) return next(err);
       if (!lampo1) return next();
       return res.json('lampo1/latestL1', {
@@ -131,7 +131,7 @@ module.exports = {
   },
 
   edit: function(req, res, next) {
-    Lampo1.findOne(req.param('id'), function foundLampo(err, lampo1) {
+    Lampo1.findOne(req.param('id'), function editLampo(err, lampo1) {
       if (err) return next(err);
       if (!lampo1) return next();
 
